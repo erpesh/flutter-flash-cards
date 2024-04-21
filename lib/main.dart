@@ -1,12 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flash_cards/firebase_options.dart';
 import 'package:flash_cards/pages/auth/auth.dart';
+import 'package:flash_cards/pages/create_set.dart';
 import 'package:flash_cards/pages/home.dart';
 import 'package:flash_cards/pages/library.dart';
 import 'package:flash_cards/pages/profile.dart';
 import 'package:flash_cards/pages/settings.dart';
-import 'package:flash_cards/theme/dark_mode.dart';
-import 'package:flash_cards/theme/light_mode.dart';
 import 'package:flash_cards/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +26,7 @@ final routes = <String, WidgetBuilder>{
   '/library': (_) => const LibraryPage(),
   '/profile': (_) => ProfilePage(),
   '/settings': (_) => const SettingsPage(),
+  '/createSet': (_) => CreateSetPage(),
 };
 
 class MyApp extends StatelessWidget {
