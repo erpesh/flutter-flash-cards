@@ -37,7 +37,6 @@ class ProfilePage extends StatelessWidget {
 
             return Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(top: 50, left: 25),

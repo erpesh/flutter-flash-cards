@@ -12,7 +12,12 @@
           "package_name": "com.example.flash_cards"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "182387056402-s4rme4bkn8r7a50mmphdo2n62h9v3tk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBuI5VgqYeuaSc6uxz8R7EKA36dUFnXvYE"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182387056402-s4rme4bkn8r7a50mmphdo2n62h9v3tk5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "182387056402-us7m13e4i8ek926teb0ovboso9o503k4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flashCards"
+              }
+            }
+          ]
         }
       }
     }

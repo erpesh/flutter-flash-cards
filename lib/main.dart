@@ -7,12 +7,19 @@ import 'package:flash_cards/pages/profile.dart';
 import 'package:flash_cards/pages/settings.dart';
 import 'package:flash_cards/theme/dark_mode.dart';
 import 'package:flash_cards/theme/light_mode.dart';
+import 'package:flash_cards/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(name: 'dev projd' ,options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp()
+    )
+  );
 }
 
 final routes = <String, WidgetBuilder>{
@@ -29,8 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const AuthPage(),
-      theme: lightMode,
-      darkTheme: darkMode,
+      theme: Provider.of<ThemeProvider>(context).themeData,
       routes: routes,
     );
   }
