@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Flash Cards"),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
       drawer: MyDrawer(),
     );

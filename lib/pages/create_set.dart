@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flash_cards/widgets/button.dart';
 import 'package:flash_cards/widgets/term_card.dart';
 import 'package:flash_cards/widgets/textfield.dart';
-
-import '../helper/helper_functions.dart';
+import 'package:flash_cards/helper/helper_functions.dart';
+import 'package:uuid/uuid.dart';
 
 class TermData {
   TextEditingController termController;
@@ -18,7 +18,9 @@ class TermData {
 }
 
 class CreateSetPage extends StatefulWidget {
-  CreateSetPage({Key? key}) : super(key: key);
+  final Map<String, dynamic>? cardsSet;
+
+  const CreateSetPage({Key? key, required this.cardsSet}) : super(key: key);
 
   @override
   _CreateSetPageState createState() => _CreateSetPageState();
@@ -71,7 +73,10 @@ class _CreateSetPageState extends State<CreateSetPage> {
             });
           }
 
+          const uuid = Uuid();
+
           Map<String, dynamic> setData = {
+            'id': uuid.v1(),
             'title': titleController.text,
             'description': descriptionController.text,
             'terms': termsList,
@@ -99,21 +104,93 @@ class _CreateSetPageState extends State<CreateSetPage> {
     }
   }
 
+  void _updateSet() async {
+    if (widget.cardsSet == null) {
+      return;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      final email = FirebaseAuth.instance.currentUser?.email;
+      if (email != null) {
+        final userSnapshot = await FirebaseFirestore.instance.collection('Users').doc(email).get();
+        if (userSnapshot.exists) {
+          final username = userSnapshot['username'];
+          final now = DateTime.now();
+          final termsList = termDataList.map((termData) {
+            return {
+              'term': termData.termController.text,
+              'definition': termData.definitionController.text,
+            };
+          }).toList();
+
+          final setData = {
+            'title': titleController.text,
+            'description': descriptionController.text,
+            'terms': termsList,
+            'isPrivate': isPrivate,
+            'author': {'username': username, 'email': email},
+            'updatedAt': now,
+          };
+
+          final setId = widget.cardsSet?["id"];
+          await FirebaseFirestore.instance.collection('Sets').doc(setId).update(setData);
+
+          Navigator.pop(context);
+        } else {
+          print('User not found.');
+        }
+      } else {
+        print('User not authenticated.');
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      displayMessageToUser("Error while updating the set", context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    // Add one default TermData item to the list
-    termDataList.add(TermData(
-      termController: TextEditingController(),
-      definitionController: TextEditingController(),
-    ));
+
+    final cardsSet = widget.cardsSet;
+
+    if (cardsSet != null) {
+      titleController.text = cardsSet["title"];
+      descriptionController.text = cardsSet["description"];
+      isPrivate = cardsSet["isPrivate"];
+
+      termDataList = cardsSet["terms"].map<TermData>((term)  {
+        var termController = TextEditingController();
+        var definitionController = TextEditingController();
+
+        termController.text = term["term"];
+        definitionController.text = term["definition"];
+
+        var termData = TermData(termController: termController, definitionController: definitionController);
+        return termData;
+      }).toList();
+    }
+    else {
+      // Add one default TermData item to the list
+      termDataList.add(TermData(
+        termController: TextEditingController(),
+        definitionController: TextEditingController(),
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create New Set"),
+        title: Text(widget.cardsSet == null ? "Create New Set" : "Edit Cards Set"),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -122,7 +199,6 @@ class _CreateSetPageState extends State<CreateSetPage> {
           padding: const EdgeInsets.all(25.0),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 25),
                 MyTextField(
@@ -186,7 +262,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
                     ),
                     MyButton(
                       text: "Create",
-                      onTap: _createSet,
+                      onTap: widget.cardsSet == null ? _createSet : _updateSet,
                     ),
                   ],
                 ),

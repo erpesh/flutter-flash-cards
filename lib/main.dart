@@ -26,7 +26,7 @@ final routes = <String, WidgetBuilder>{
   '/library': (_) => const LibraryPage(),
   '/profile': (_) => ProfilePage(),
   '/settings': (_) => const SettingsPage(),
-  '/createSet': (_) => CreateSetPage(),
+  '/createSet': (_) => CreateSetPage(cardsSet: null),
 };
 
 class MyApp extends StatelessWidget {

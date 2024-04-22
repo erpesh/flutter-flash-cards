@@ -1,3 +1,4 @@
+import 'package:flash_cards/pages/set_details.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +20,7 @@ class LibraryPage extends StatelessWidget {
         },
         child: Icon(
           Icons.add,
-          color: Theme.of(context).colorScheme.onSecondary,
+          color: Theme.of(context).colorScheme.inversePrimary,
         ),
       ),
     );
@@ -54,31 +55,42 @@ class LibraryPage extends StatelessWidget {
             child: ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 final data = document.data() as Map<String, dynamic>;
-                return Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            data["title"],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20
-                            ),
-                          ),
-                          Text(data["description"])
-                        ],
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SetDetailsPage(cardsSet: data),
                       ),
-                      Row(
-                        children: [Text(data["author"]["username"])],
-                      )
-                    ],
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              data["title"],
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20
+                              ),
+                            ),
+                            Text(data["description"])
+                          ],
+                        ),
+                        Row(
+                          children: [Text(data["author"]["username"])],
+                        )
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
