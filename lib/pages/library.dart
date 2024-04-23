@@ -32,70 +32,70 @@ class LibraryPage extends StatelessWidget {
     if (user == null) {
       return Center(child: Text("Please sign in to view your library."));
     } else {
-      return StreamBuilder(
+      return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Sets')
             .where('author.email', isEqualTo: user.email)
             .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          }
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List setsList = snapshot.data!.docs;
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+            return Padding(
+              padding: const EdgeInsets.all(15),
+              child: ListView.builder(
+                  itemCount: setsList.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot document = setsList[index];
+                    String docId = document.id;
+                    final data = document.data() as Map<String, dynamic>;
 
-          if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text("You haven't created any sets yet."));
-          }
-
-          return Padding(
-            padding: const EdgeInsets.all(15),
-            child: ListView(
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                final data = document.data() as Map<String, dynamic>;
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SetDetailsPage(cardsSet: data),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SetDetailsPage(cardsSet: {
+                              ...data,
+                              "id": docId
+                            }),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              data["title"],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20
-                              ),
+                            Column(
+                              children: [
+                                Text(
+                                  data["title"],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20
+                                  ),
+                                ),
+                                Text(data["description"])
+                              ],
                             ),
-                            Text(data["description"])
+                            Row(
+                              children: [Text(data["author"]["username"])],
+                            )
                           ],
                         ),
-                        Row(
-                          children: [Text(data["author"]["username"])],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          );
+                      ),
+                    );
+                  }
+              ),
+            );
+          }
+          return Center(child: Text("You haven't created any sets yet."));
         },
       );
     }

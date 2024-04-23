@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class TermCard extends StatelessWidget {
+class TermListCard extends StatelessWidget {
   final int index;
   final TextEditingController termController;
   final TextEditingController definitionController;
   final void Function() onDelete;
 
-  const TermCard({
+  const TermListCard({
     super.key,
     required this.index,
     required this.termController,

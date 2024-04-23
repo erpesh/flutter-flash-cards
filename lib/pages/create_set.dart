@@ -2,16 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_cards/widgets/button.dart';
-import 'package:flash_cards/widgets/term_card.dart';
+import 'package:flash_cards/widgets/term_list_card.dart';
 import 'package:flash_cards/widgets/textfield.dart';
 import 'package:flash_cards/helper/helper_functions.dart';
 import 'package:uuid/uuid.dart';
 
 class TermData {
+  String id;
   TextEditingController termController;
   TextEditingController definitionController;
 
   TermData({
+    required this.id,
     required this.termController,
     required this.definitionController,
   });
@@ -32,9 +34,12 @@ class _CreateSetPageState extends State<CreateSetPage> {
   List<TermData> termDataList = [];
   bool isPrivate = false;
 
+  static const uuid = Uuid();
+
   void _addTermCard() {
     setState(() {
       termDataList.add(TermData(
+        id: uuid.v1(),
         termController: TextEditingController(),
         definitionController: TextEditingController(),
       ));
@@ -66,17 +71,16 @@ class _CreateSetPageState extends State<CreateSetPage> {
           String username = userSnapshot['username'];
           DateTime now = DateTime.now();
           List<Map<String, String>> termsList = [];
+
           for (var termData in termDataList) {
             termsList.add({
+              'id': termData.id,
               'term': termData.termController.text,
               'definition': termData.definitionController.text,
             });
           }
 
-          const uuid = Uuid();
-
           Map<String, dynamic> setData = {
-            'id': uuid.v1(),
             'title': titleController.text,
             'description': descriptionController.text,
             'terms': termsList,
@@ -118,6 +122,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
 
     try {
       final email = FirebaseAuth.instance.currentUser?.email;
+
       if (email != null) {
         final userSnapshot = await FirebaseFirestore.instance.collection('Users').doc(email).get();
         if (userSnapshot.exists) {
@@ -125,6 +130,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
           final now = DateTime.now();
           final termsList = termDataList.map((termData) {
             return {
+              'id': termData.id,
               'term': termData.termController.text,
               'definition': termData.definitionController.text,
             };
@@ -149,6 +155,8 @@ class _CreateSetPageState extends State<CreateSetPage> {
       } else {
         print('User not authenticated.');
       }
+      Navigator.pop(context);
+      Navigator.pop(context);
     } catch (e) {
       Navigator.pop(context);
       displayMessageToUser("Error while updating the set", context);
@@ -173,13 +181,18 @@ class _CreateSetPageState extends State<CreateSetPage> {
         termController.text = term["term"];
         definitionController.text = term["definition"];
 
-        var termData = TermData(termController: termController, definitionController: definitionController);
+        var termData = TermData(
+            id: term["id"],
+            termController: termController,
+            definitionController: definitionController
+        );
         return termData;
       }).toList();
     }
     else {
       // Add one default TermData item to the list
       termDataList.add(TermData(
+        id: uuid.v1(),
         termController: TextEditingController(),
         definitionController: TextEditingController(),
       ));
@@ -243,7 +256,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
                 Column(
                   children: [
                     for (int i = 0; i < termDataList.length; i++)
-                      TermCard(
+                      TermListCard(
                         index: i,
                         termController: termDataList[i].termController,
                         definitionController: termDataList[i].definitionController,
@@ -260,9 +273,14 @@ class _CreateSetPageState extends State<CreateSetPage> {
                       text: "Add Term Card",
                       onTap: _addTermCard,
                     ),
+                    widget.cardsSet == null ?
                     MyButton(
                       text: "Create",
-                      onTap: widget.cardsSet == null ? _createSet : _updateSet,
+                      onTap: _createSet,
+                    ) :
+                    MyButton(
+                      text: "Update",
+                      onTap: _updateSet,
                     ),
                   ],
                 ),

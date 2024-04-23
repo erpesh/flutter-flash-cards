@@ -50,6 +50,7 @@ class _TermCardsState extends State<TermCards> {
     return GestureDetector(
       onTap: flipCard,
       child: Card(
+        color: Theme.of(context).colorScheme.primary,
         child: Column(
           children: [
             Padding(
