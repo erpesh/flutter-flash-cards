@@ -1,5 +1,5 @@
 import 'package:flash_cards/services/test-generator.dart';
-import 'package:flash_cards/widgets/test/multi-choice.dart';
+import 'package:flash_cards/widgets/test/multi_choice.dart';
 import 'package:flash_cards/widgets/test/true_false.dart';
 import 'package:flutter/material.dart';
 

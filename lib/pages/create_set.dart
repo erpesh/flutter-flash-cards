@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_cards/widgets/button.dart';
-import 'package:flash_cards/widgets/term_list_card.dart';
+import 'package:flash_cards/widgets/create_term_card.dart';
 import 'package:flash_cards/widgets/textfield.dart';
 import 'package:flash_cards/helper/helper_functions.dart';
 import 'package:uuid/uuid.dart';
@@ -256,7 +256,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
                 Column(
                   children: [
                     for (int i = 0; i < termDataList.length; i++)
-                      TermListCard(
+                      CreateTermCard(
                         index: i,
                         termController: termDataList[i].termController,
                         definitionController: termDataList[i].definitionController,
