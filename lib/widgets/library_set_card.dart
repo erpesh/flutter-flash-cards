@@ -67,7 +67,7 @@ class _LibrarySetCardState extends State<LibrarySetCard> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 8),
-                ClipRRect(
+                profileImage != null ? ClipRRect(
                   borderRadius: BorderRadius.circular(24),
                   child: Image.network(
                     profileImage!,
@@ -75,7 +75,7 @@ class _LibrarySetCardState extends State<LibrarySetCard> {
                     width: 32,
                     fit: BoxFit.cover,
                   ),
-                ),
+                ) : SizedBox(),
               ],
             )
           ],

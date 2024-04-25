@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class MultiChoiceCard extends StatelessWidget {
-  final int index;
+  final int cardNumber;
   final Map<String, dynamic> mcObject;
   final void Function(String answer) selectAnswer;
 
   const MultiChoiceCard({
     super.key,
-    required this.index,
+    required this.cardNumber,
     required this.mcObject,
     required this.selectAnswer
   });
@@ -23,7 +23,7 @@ class MultiChoiceCard extends StatelessWidget {
     final activeAnswerDecor = BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.blue.shade900),
-        color: Colors.blue.shade200
+        color: Colors.blue.shade400
     );
 
     return Card(
@@ -41,7 +41,7 @@ class MultiChoiceCard extends StatelessWidget {
                       fontWeight: FontWeight.bold
                   ),
                 ),
-                Text((index + 1).toString() + "/20")
+                Text(cardNumber.toString() + "/20")
               ],
             ),
             SizedBox(height: 10),
