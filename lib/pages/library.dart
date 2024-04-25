@@ -1,11 +1,17 @@
-import 'package:flash_cards/pages/set_details.dart';
 import 'package:flash_cards/widgets/library_set_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LibraryPage extends StatelessWidget {
+class LibraryPage extends StatefulWidget {
   const LibraryPage({Key? key}) : super(key: key);
+
+  @override
+  State<LibraryPage> createState() => _LibraryPageState();
+}
+
+class _LibraryPageState extends State<LibraryPage> {
+  bool showOnlyUserSets = false;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +20,34 @@ class LibraryPage extends StatelessWidget {
         title: Text("Library"),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
-      body: _buildLibraryList(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "Only Your Sets",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16
+                  ),
+                ),
+                SizedBox(width: 5),
+                Switch(
+                  value: showOnlyUserSets,
+                  onChanged: (newValue) {
+                    setState(() {
+                      showOnlyUserSets = newValue;
+                    });
+                  },
+                ),
+              ],
+            ),
+            _buildLibraryList(),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, "/createSet");
@@ -34,9 +67,14 @@ class LibraryPage extends StatelessWidget {
       return Center(child: Text("Please sign in to view your library."));
     } else {
       return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
+        stream: showOnlyUserSets ?
+        FirebaseFirestore.instance
             .collection('Sets')
             .where('author.email', isEqualTo: user.email)
+            .snapshots() :
+        FirebaseFirestore.instance
+            .collection('Sets')
+            .where('isPrivate', isEqualTo: false)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -44,31 +82,17 @@ class LibraryPage extends StatelessWidget {
 
             return Padding(
               padding: const EdgeInsets.all(15),
-              child: ListView.builder(
-                  itemCount: setsList.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot document = setsList[index];
-                    String docId = document.id;
-                    final data = document.data() as Map<String, dynamic>;
-
-                    return LibrarySetCard(
-                      title: data["title"],
-                      description: data["description"],
-                      author: data["author"],
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SetDetailsPage(cardsSet: {
-                              ...data,
-                              "id": docId
-                            }),
-                          ),
-                        );
+              child: Column(
+                children: [
+                  for (int index = 0; index < setsList.length; index++)
+                    LibrarySetCard(
+                      cardSetData: {
+                        ...setsList[index].data() as Map<String, dynamic>,
+                        "id": setsList[index].id
                       },
-                    );
-                  }
-              ),
+                    ),
+                ],
+              )
             );
           }
           return Center(child: Text("You haven't created any sets yet."));

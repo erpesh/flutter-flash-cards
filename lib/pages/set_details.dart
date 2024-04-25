@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards/pages/create_set.dart';
 import 'package:flash_cards/pages/test.dart';
 import 'package:flash_cards/widgets/term_cards.dart';
@@ -10,6 +11,8 @@ class SetDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(cardsSet['title']),
@@ -25,22 +28,36 @@ class SetDetailsPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
+                Row(
                   children: [
-                    const Text(
-                      "Created by",
-                      style: TextStyle(fontSize: 14)
+                    Column(
+                      children: [
+                        const Text(
+                          "Created by",
+                          style: TextStyle(fontSize: 14)
+                        ),
+                        Text(
+                          cardsSet['author']['username'],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20
+                          ),
+                        )
+                      ],
                     ),
-                    Text(
-                      cardsSet['author']['username'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20
+                    SizedBox(width: 10),
+                    cardsSet["profilePicture"] != null ? ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Image.network(
+                        cardsSet["profilePicture"]!,
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.cover,
                       ),
-                    )
+                    ) : SizedBox()
                   ],
                 ),
-                IconButton(
+                currentUser != null && currentUser.email == cardsSet["author"]["email"] ? IconButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -53,7 +70,7 @@ class SetDetailsPage extends StatelessWidget {
                     Icons.edit,
                     color: Theme.of(context).colorScheme.inversePrimary
                   )
-                )
+                ) : SizedBox()
               ],
             ),
             const SizedBox(height: 10),

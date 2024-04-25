@@ -18,7 +18,7 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   late Map<String, dynamic> generatedTest;
   bool isSubmitted = false;
-  double? percentage;
+  double? percentage = 45;
 
   final scrollController = ScrollController();
 
@@ -76,37 +76,54 @@ class _TestPageState extends State<TestPage> {
               controller: scrollController,
               children: [
                 percentage != null ?
-                Row(
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        Center(
-                          child: SizedBox(
-                            width: 100,
-                            height: 100,
-                            child: CircularProgressIndicator(
-                              valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
-                              strokeWidth: 3,
-                              value: percentage! / 100,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Center(
+                            child: SizedBox(
+                              width: 65,
+                              height: 65,
+                              child: CircularProgressIndicator(
+                                valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
+                                strokeWidth: 6,
+                                value: percentage! / 100,
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
                           ),
-                        ),
-                        Center(child: Text(percentage!.toStringAsFixed(0) + "%")),
-                      ],
-                    ),
-                    ElevatedButton(
-                        onPressed: () async {
-                          final box = context.findRenderObject() as RenderBox?;
-                          await Share.shareWithResult(
-                            "Test result: ${percentage!.toStringAsFixed(0)}%",
-                            subject: "Test results",
-                            sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-                          );
-                        },
-                        child: Text("Share")
-                    )
-                  ],
+                          Center(child: Text(percentage!.toStringAsFixed(0) + "%")),
+                        ],
+                      ),
+                      ElevatedButton.icon(
+                          onPressed: () async {
+                            final box = context.findRenderObject() as RenderBox?;
+                            await Share.share(
+                              "Test result: ${percentage!.toStringAsFixed(0)}%",
+                              subject: "Test results",
+                              sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                            );
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          ),
+                          icon: Icon(
+                            Icons.share,
+                            color: Theme.of(context).colorScheme.inversePrimary
+                          ),
+                          label: Text(
+                            "Share",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.inversePrimary
+                            ),
+                          )
+                      ),
+                    ],
+                  ),
                 ) : SizedBox(),
                 // Expanded(
                 //   child: ListView.builder(

@@ -1,18 +1,14 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/set_details.dart';
+
 class LibrarySetCard extends StatefulWidget {
-  final String title;
-  final String description;
-  final Map<String, dynamic> author;
-  final void Function() onTap;
+  final Map<String, dynamic> cardSetData;
 
   const LibrarySetCard({
     super.key,
-    required this.title,
-    required this.description,
-    required this.author,
-    required this.onTap,
+    required this.cardSetData
   });
 
   @override
@@ -26,7 +22,7 @@ class _LibrarySetCardState extends State<LibrarySetCard> {
   void initState() {
     super.initState();
 
-    Reference ref = FirebaseStorage.instance.ref().child("pfp-${widget.author["email"]}.jpg");
+    Reference ref = FirebaseStorage.instance.ref().child("pfp-${widget.cardSetData["author"]["email"]}.jpg");
     ref.getDownloadURL().then((value) {
       setState(() {
         profileImage = value;
@@ -37,7 +33,17 @@ class _LibrarySetCardState extends State<LibrarySetCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SetDetailsPage(cardsSet: {
+              ...widget.cardSetData,
+              "profilePicture": profileImage
+            }),
+          ),
+        );
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(15),
@@ -51,19 +57,19 @@ class _LibrarySetCardState extends State<LibrarySetCard> {
             Column(
               children: [
                 Text(
-                  widget.title,
+                  widget.cardSetData["title"],
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20
                   ),
                 ),
-                Text(widget.description)
+                Text(widget.cardSetData["description"])
               ],
             ),
             Row(
               children: [
                 Text(
-                  widget.author["username"]!,
+                  widget.cardSetData["author"]["username"]!,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 8),
