@@ -6,6 +6,7 @@ import 'package:flash_cards/pages/home.dart';
 import 'package:flash_cards/pages/library.dart';
 import 'package:flash_cards/pages/profile.dart';
 import 'package:flash_cards/pages/settings.dart';
+import 'package:flash_cards/pages/test_history.dart';
 import 'package:flash_cards/services/notifications.dart';
 import 'package:flash_cards/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +25,12 @@ void main() async {
   );
 }
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 final routes = <String, WidgetBuilder>{
   '/home': (_) => const HomePage(),
   '/library': (_) => const LibraryPage(),
+  '/tests': (_) => const TestHistoryPage(),
   '/profile': (_) => ProfilePage(),
   '/settings': (_) => const SettingsPage(),
   '/createSet': (_) => CreateSetPage(cardsSet: null),
@@ -39,6 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: const AuthPage(),
+      navigatorKey: navigatorKey,
       theme: Provider.of<ThemeProvider>(context).themeData,
       routes: routes,
     );

@@ -1,4 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flash_cards/pages/test_history.dart';
+import 'package:flutter/material.dart';
+
+import '../main.dart';
 
 class NotificationServices {
   static Future<void> initialiseNotification() async {
@@ -30,12 +34,12 @@ class NotificationServices {
   }
 
   static Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
-    // final payload = receivedAction.payload ?? {};
-    // if (payload["navigate"] == "true") {
-    //   navigatorKey.currentState?.push(
-    //     MaterialPageRoute(builder: (_) => const NotifiedScreen())
-    //   );
-    // }
+    final payload = receivedAction.payload ?? {};
+    if (payload["navigate"] == "true") {
+      navigatorKey.currentState?.push(
+        MaterialPageRoute(builder: (_) => const TestHistoryPage())
+      );
+    }
   }
   static Future<void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
     print("Notification created");

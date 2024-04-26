@@ -106,7 +106,7 @@ class SetDetailsPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TestPage(terms: cardsSet["terms"]),
+                      builder: (context) => TestPage(cardsSet: cardsSet),
                     ),
                   );
                 },

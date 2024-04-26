@@ -1,5 +1,8 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flash_cards/services/database_services.dart';
 import 'package:flash_cards/services/test-generator.dart';
 import 'package:flash_cards/widgets/button.dart';
+import 'package:flash_cards/widgets/circular_result.dart';
 import 'package:flash_cards/widgets/test/multi_choice.dart';
 import 'package:flash_cards/widgets/test/true_false.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +11,12 @@ import 'package:share_plus/share_plus.dart';
 import '../services/notifications.dart';
 
 class TestPage extends StatefulWidget {
-  // final List<Map<String, String>> terms;
-  final List<dynamic> terms;
+  final Map<String, dynamic> cardsSet;
 
-  const TestPage({Key? key, required this.terms}) : super(key: key);
+  const TestPage({
+    Key? key,
+    required this.cardsSet
+  }) : super(key: key);
 
   @override
   _TestPageState createState() => _TestPageState();
@@ -56,17 +61,32 @@ class _TestPageState extends State<TestPage> {
     );
 
     // Display notification
+    // await NotificationServices.displayNotification(
+    //     title: "Test Results",
+    //     body: "To see all your past test results go to Test History page"
+    // );
+
     await NotificationServices.displayNotification(
-        title: "Test Results",
-        body: "Test result: ${percentage!.toStringAsFixed(0)}%"
+        title: "Test results",
+        body: "Go to Test History page to see your past test results",
+        actionButtons: [NotificationActionButton(
+            key: "0",
+            label: "Visit",
+            actionType: ActionType.SilentAction
+        )],
+        payload: {
+          "navigate": "true"
+        }
     );
+
+    await DatabaseServices.saveTestResult(widget.cardsSet["title"], percentage!);
   }
 
   @override
   void initState() {
     super.initState();
 
-    generatedTest = TestGenerator.generateTest(widget.terms);
+    generatedTest = TestGenerator.generateTest(widget.cardsSet["terms"]);
   }
 
   @override
@@ -88,24 +108,7 @@ class _TestPageState extends State<TestPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Center(
-                            child: SizedBox(
-                              width: 65,
-                              height: 65,
-                              child: CircularProgressIndicator(
-                                valueColor: new AlwaysStoppedAnimation<Color>(Colors.blue),
-                                strokeWidth: 6,
-                                value: percentage! / 100,
-                                backgroundColor: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                          Center(child: Text(percentage!.toStringAsFixed(0) + "%")),
-                        ],
-                      ),
+                      CircularResult(size: 65, percentage: percentage!),
                       ElevatedButton.icon(
                           onPressed: () async {
                             final box = context.findRenderObject() as RenderBox?;
