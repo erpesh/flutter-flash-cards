@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
-
 const int maxNumberOfTerms = 20;
 
 class TestGenerator {
@@ -106,10 +104,10 @@ class TestGenerator {
     Map<String, dynamic> generatedTest = {
       'trueFalse': trueFalseItems,
       'multipleChoice': multipleChoiceItems,
-      'matching': matchingTest,
-      'written': writtenItems,
-      'lengths': lengths,
-      'totalLength': lengths.reduce((value, element) => value + element),
+      // 'matching': matchingTest,
+      // 'written': writtenItems,
+      // 'lengths': lengths,
+      // 'totalLength': lengths.reduce((value, element) => value + element),
     };
 
     return generatedTest;

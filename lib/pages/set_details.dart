@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards/pages/create_set.dart';
 import 'package:flash_cards/pages/test.dart';
@@ -9,9 +10,23 @@ class SetDetailsPage extends StatelessWidget {
 
   const SetDetailsPage({Key? key, required this.cardsSet}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     final User? currentUser = FirebaseAuth.instance.currentUser;
+
+    Future<void> deleteSet() async {
+      try {
+        await FirebaseFirestore.instance
+            .collection('Sets')
+            .doc(cardsSet['id'])
+            .delete();
+        Navigator.pop(context);
+      } catch (e) {
+        print('Error deleting set: $e');
+        // Handle error
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -57,20 +72,32 @@ class SetDetailsPage extends StatelessWidget {
                     ) : SizedBox()
                   ],
                 ),
-                currentUser != null && currentUser.email == cardsSet["author"]["email"] ? IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateSetPage(cardsSet: cardsSet),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: Theme.of(context).colorScheme.inversePrimary
-                  )
-                ) : SizedBox()
+                currentUser != null && currentUser.email == cardsSet["author"]["email"] ?
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CreateSetPage(cardsSet: cardsSet),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                                Icons.edit,
+                                color: Theme.of(context).colorScheme.inversePrimary
+                            )
+                        ),
+                        IconButton(
+                            onPressed: deleteSet,
+                            icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red
+                            )
+                        )
+                      ],
+                    ): SizedBox()
               ],
             ),
             const SizedBox(height: 10),

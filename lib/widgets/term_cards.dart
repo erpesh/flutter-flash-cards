@@ -48,6 +48,13 @@ class _TermCardsState extends State<TermCards> {
     final currentTerm = widget.terms[currentIndex];
 
     return GestureDetector(
+      onHorizontalDragEnd: (DragEndDetails details) {
+        if (details.primaryVelocity! > 0) {
+          prevCard();
+        } else if (details.primaryVelocity! < 0) {
+          nextCard();
+        }
+      },
       onTap: flipCard,
       child: Card(
         color: Theme.of(context).colorScheme.primary,

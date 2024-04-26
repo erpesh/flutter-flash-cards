@@ -19,8 +19,7 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   late Map<String, dynamic> generatedTest;
-  bool isSubmitted = false;
-  double? percentage = 45;
+  double? percentage;
 
   final scrollController = ScrollController();
 
@@ -45,7 +44,6 @@ class _TestPageState extends State<TestPage> {
     int totalCorrectCount = trueFalseCorrectCount + multipleChoiceCorrectCount;
 
     setState(() {
-      isSubmitted = true;
       percentage = (totalCorrectCount / maxScore) * 100;
     });
 
@@ -193,13 +191,14 @@ class _TestPageState extends State<TestPage> {
                       )
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: MyButton(
-                      text: "Submit",
-                      onTap: finishTest
-                  ),
-                )
+                percentage == null ?
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: MyButton(
+                        text: "Submit",
+                        onTap: finishTest
+                    ),
+                  ) : SizedBox()
               ]
           ),
         ),
