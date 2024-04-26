@@ -5,6 +5,8 @@ import 'package:flash_cards/widgets/test/true_false.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../services/notifications.dart';
+
 class TestPage extends StatefulWidget {
   // final List<Map<String, String>> terms;
   final List<dynamic> terms;
@@ -22,7 +24,7 @@ class _TestPageState extends State<TestPage> {
 
   final scrollController = ScrollController();
 
-  void finishTest() {
+  void finishTest() async {
     final maxScore = generatedTest["trueFalse"].length + generatedTest["multipleChoice"].length;
 
     int trueFalseCorrectCount = 0;
@@ -47,11 +49,18 @@ class _TestPageState extends State<TestPage> {
       percentage = (totalCorrectCount / maxScore) * 100;
     });
 
+    // Scroll to the top
     final position = scrollController.position.minScrollExtent;
     scrollController.animateTo(
       duration: Duration(milliseconds: 400),
       position,
       curve: Curves.linear,
+    );
+
+    // Display notification
+    await NotificationServices.displayNotification(
+        title: "Test Results",
+        body: "Test result: ${percentage!.toStringAsFixed(0)}%"
     );
   }
 

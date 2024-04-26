@@ -112,8 +112,6 @@ class TestGenerator {
       'totalLength': lengths.reduce((value, element) => value + element),
     };
 
-    debugPrint(generatedTest.toString());
-
     return generatedTest;
   }
 }
