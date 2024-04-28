@@ -32,8 +32,7 @@ final routes = <String, WidgetBuilder>{
   '/library': (_) => const LibraryPage(),
   '/tests': (_) => const TestHistoryPage(),
   '/profile': (_) => ProfilePage(),
-  '/settings': (_) => const SettingsPage(),
-  '/createSet': (_) => CreateSetPage(cardsSet: null),
+  '/createSet': (_) => const CreateSetPage(),
 };
 
 class MyApp extends StatelessWidget {

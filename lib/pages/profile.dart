@@ -1,10 +1,12 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flash_cards/widgets/back_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:provider/provider.dart';
+import '../theme/theme_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({super.key});
@@ -60,7 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: Text("Profile")),
+      appBar: AppBar(
+        title: Text("Profile"),
+        backgroundColor: Theme.of(context).colorScheme.background,
+      ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUserDetails(),
@@ -78,56 +83,79 @@ class _ProfilePageState extends State<ProfilePage> {
             Map<String, dynamic>? user = snapshot.data!.data();
 
             return Center(
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 50, left: 25),
-                    child: Row(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 30, top: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       children: [
-                        MyBackButton(),
+                        GestureDetector(
+                          onTap: pickUploadImage,
+                          child: imageUrl != null ?
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: Image.network(
+                              imageUrl!,
+                              height: 90,
+                              width: 90,
+                              fit: BoxFit.cover,
+                            ),
+                          ) :
+                          Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(24)
+                              ),
+                              padding: const EdgeInsets.all(13),
+                              child: const Icon(
+                                  Icons.person,
+                                  size: 64
+                              )
+                          ),
+                        ),
+                        const SizedBox(height: 25),
+                        Text(
+                            user!["username"],
+                            style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold
+                            )
+                        ),
+                        Text(
+                            user["email"],
+                            style: TextStyle(
+                                color: Colors.grey[600]
+                            )
+                        )
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 25),
-                  GestureDetector(
-                    onTap: pickUploadImage,
-                    child: imageUrl != null ?
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Image.network(
-                        imageUrl!,
-                        height: 90,
-                        width: 90,
-                        fit: BoxFit.cover,
-                      ),
-                    ) :
                     Container(
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(24)
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(12)
                       ),
-                      padding: const EdgeInsets.all(13),
-                      child: const Icon(
-                        Icons.person,
-                        size: 64
-                      )
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  Text(
-                    user!["username"],
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold
+                      margin: const EdgeInsets.only(left: 25, top: 10, right: 25),
+                      padding: const EdgeInsets.all(25),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                              "Dark Mode",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.inversePrimary
+                              )
+                          ),
+                          CupertinoSwitch(
+                              value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode,
+                              onChanged: (value) => Provider.of<ThemeProvider>(context, listen: false).toggleTheme()
+                          ),
+                        ],
+                      ),
                     )
-                  ),
-                  Text(
-                      user["email"],
-                      style: TextStyle(
-                          color: Colors.grey[600]
-                      )
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }

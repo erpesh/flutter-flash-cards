@@ -22,7 +22,7 @@ class TermData {
 class CreateSetPage extends StatefulWidget {
   final Map<String, dynamic>? cardsSet;
 
-  const CreateSetPage({Key? key, required this.cardsSet}) : super(key: key);
+  const CreateSetPage({Key? key, this.cardsSet}) : super(key: key);
 
   @override
   _CreateSetPageState createState() => _CreateSetPageState();
