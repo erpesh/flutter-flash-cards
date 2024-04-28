@@ -43,13 +43,6 @@ class CreateTermCard extends StatelessWidget {
             controller: termController,
             cursorColor: Theme.of(context).colorScheme.inversePrimary,
             decoration: InputDecoration(
-              // border: OutlineInputBorder(
-              //   borderRadius: BorderRadius.circular(10),
-              // ),
-              // focusedBorder: OutlineInputBorder(
-              //     borderRadius: BorderRadius.circular(10),
-              //     borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary)
-              // ),
               hintText: "Term",
             ),
           ),
@@ -58,13 +51,6 @@ class CreateTermCard extends StatelessWidget {
             controller: definitionController,
             cursorColor: Theme.of(context).colorScheme.inversePrimary,
             decoration: InputDecoration(
-              // border: OutlineInputBorder(
-              //   borderRadius: BorderRadius.circular(10),
-              // ),
-              // focusedBorder: OutlineInputBorder(
-              //     borderRadius: BorderRadius.circular(10),
-              //     borderSide: BorderSide(color: Theme.of(context).colorScheme.inversePrimary)
-              // ),
               hintText: "Definition",
             ),
           )

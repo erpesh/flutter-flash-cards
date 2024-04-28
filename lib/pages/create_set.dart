@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -237,23 +239,9 @@ class _CreateSetPageState extends State<CreateSetPage> {
                   ],
                 ),
                 const SizedBox(height: 25),
-                // Expanded(
-                //   child: ReorderableListView(
-                //     padding: EdgeInsets.zero,
-                //     onReorder: _onReorder,
-                //     children: [
-                //       for (int i = 0; i < termDataList.length; i++)
-                //         TermCard(
-                //           index: i,
-                //           termController: termDataList[i].termController,
-                //           definitionController: termDataList[i].definitionController,
-                //           onDelete: () => _removeTermCard(i),
-                //           key: Key(i.toString()),
-                //         )
-                //     ],
-                //   ),
-                // ),
-                Column(
+                ReorderableListView(
+                  shrinkWrap: true,
+                  onReorder: _onReorder,
                   children: [
                     for (int i = 0; i < termDataList.length; i++)
                       CreateTermCard(
@@ -292,13 +280,13 @@ class _CreateSetPageState extends State<CreateSetPage> {
     );
   }
 
-  // void _onReorder(int oldIndex, int newIndex) {
-  //   setState(() {
-  //     if (oldIndex < newIndex) {
-  //       newIndex--;
-  //     }
-  //     final item = termDataList.removeAt(oldIndex);
-  //     termDataList.insert(newIndex, item);
-  //   });
-  // }
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (oldIndex < newIndex) {
+        newIndex--;
+      }
+      final item = termDataList.removeAt(oldIndex);
+      termDataList.insert(newIndex, item);
+    });
+  }
 }
