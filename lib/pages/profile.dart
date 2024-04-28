@@ -46,6 +46,11 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  void logout() {
+    FirebaseAuth.instance.signOut();
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -66,7 +71,6 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text("Profile"),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUserDetails(),
         builder: (context, snapshot) {
@@ -130,29 +134,70 @@ class _ProfilePageState extends State<ProfilePage> {
                         )
                       ],
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(12)
-                      ),
-                      margin: const EdgeInsets.only(left: 25, top: 10, right: 25),
-                      padding: const EdgeInsets.all(25),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                              "Dark Mode",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                    Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(12)
+                          ),
+                          margin: const EdgeInsets.only(left: 25, top: 10, right: 25),
+                          padding: const EdgeInsets.all(15),
+                          height: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                  "Dark Mode",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.inversePrimary
+                                  )
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CupertinoSwitch(
+                                      value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode,
+                                      onChanged: (value) => Provider.of<ThemeProvider>(context, listen: false).toggleTheme()
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: logout,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                                borderRadius: BorderRadius.circular(12)
+                            ),
+                            margin: const EdgeInsets.only(left: 25, top: 10, right: 25),
+                            padding: const EdgeInsets.all(15),
+                            height: 60,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    "Log out",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).colorScheme.inversePrimary
+                                    )
+                                ),
+                                Icon(
+                                  Icons.logout,
+                                  size: 30,
                                   color: Theme.of(context).colorScheme.inversePrimary
-                              )
+                                ),
+                              ],
+                            ),
                           ),
-                          CupertinoSwitch(
-                              value: Provider.of<ThemeProvider>(context, listen: false).isDarkMode,
-                              onChanged: (value) => Provider.of<ThemeProvider>(context, listen: false).toggleTheme()
-                          ),
-                        ],
-                      ),
+                        )
+                      ],
                     )
                   ],
                 ),

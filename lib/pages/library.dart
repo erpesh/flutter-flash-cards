@@ -1,3 +1,5 @@
+import 'package:flash_cards/pages/create_set.dart';
+import 'package:flash_cards/widgets/bottom_navigation_bar.dart';
 import 'package:flash_cards/widgets/library_set_card.dart';
 import 'package:flash_cards/widgets/textfield.dart';
 import 'package:flutter/material.dart';
@@ -109,7 +111,10 @@ class _LibraryPageState extends State<LibraryPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, "/createSet");
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreateSetPage())
+          );
         },
         child: Icon(
           Icons.add,

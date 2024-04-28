@@ -5,7 +5,6 @@ import 'package:flash_cards/pages/create_set.dart';
 import 'package:flash_cards/pages/home.dart';
 import 'package:flash_cards/pages/library.dart';
 import 'package:flash_cards/pages/profile.dart';
-import 'package:flash_cards/pages/settings.dart';
 import 'package:flash_cards/pages/test_history.dart';
 import 'package:flash_cards/services/notifications.dart';
 import 'package:flash_cards/theme/theme_provider.dart';
@@ -27,13 +26,12 @@ void main() async {
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-final routes = <String, WidgetBuilder>{
-  '/home': (_) => const HomePage(),
-  '/library': (_) => const LibraryPage(),
-  '/tests': (_) => const TestHistoryPage(),
-  '/profile': (_) => ProfilePage(),
-  '/createSet': (_) => const CreateSetPage(),
-};
+// final routes = <String, WidgetBuilder>{
+//   '/home': (_) => const HomePage(),
+//   '/library': (_) => const LibraryPage(),
+//   '/tests': (_) => const TestHistoryPage(),
+//   '/profile': (_) => ProfilePage(),
+// };
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -44,7 +42,7 @@ class MyApp extends StatelessWidget {
       home: const AuthPage(),
       navigatorKey: navigatorKey,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      routes: routes,
+      // routes: routes,
     );
   }
 }
