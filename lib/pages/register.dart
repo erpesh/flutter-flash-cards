@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards/services/auth_services.dart';
-import 'package:flash_cards/services/firestore.dart';
+import 'package:flash_cards/services/firestore_services.dart';
 import 'package:flash_cards/widgets/button.dart';
 import 'package:flash_cards/widgets/textfield.dart';
 import 'package:flutter/material.dart';
-
-import '../helper/helper_functions.dart';
+import 'package:flash_cards/helper/helper_functions.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -22,7 +20,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
-  final firestore = FirestoreService();
+  final firestore = FirestoreServices();
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -44,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
     else {
       try {
         final email = emailController.text.trim().toLowerCase();
-        final password = emailController.text.trim();
+        final password = passwordController.text.trim();
 
         UserCredential? userCredential = await AuthServices.registerUser(email, password);
 
@@ -63,14 +61,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> createUserRecord(UserCredential? userCredential) async {
     if (userCredential != null && userCredential.user != null) {
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userCredential.user!.email)
-          .set({
-            'email': userCredential.user!.email,
-            'username': usernameController.text,
-            'createdAt': Timestamp.now()
-          });
+      FirestoreServices.addUserDocument(
+          userCredential.user!.email!,
+          usernameController.text.trim()
+      );
     }
   }
 

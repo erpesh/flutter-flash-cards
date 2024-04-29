@@ -31,7 +31,8 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final email = emailController.text.trim().toLowerCase();
-      final password = emailController.text.trim();
+      final password = passwordController.text.trim();
+
       await AuthServices.loginUser(email, password);
       
       if (context.mounted) Navigator.pop(context);

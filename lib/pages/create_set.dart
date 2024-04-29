@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_cards/services/firestore_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_cards/widgets/button.dart';
 import 'package:flash_cards/widgets/create_term_card.dart';
@@ -71,9 +72,8 @@ class _CreateSetPageState extends State<CreateSetPage> {
 
         if (userSnapshot.exists) {
           String username = userSnapshot['username'];
-          DateTime now = DateTime.now();
-          List<Map<String, String>> termsList = [];
 
+          List<Map<String, String>> termsList = [];
           for (var termData in termDataList) {
             termsList.add({
               'id': termData.id,
@@ -88,11 +88,9 @@ class _CreateSetPageState extends State<CreateSetPage> {
             'terms': termsList,
             'isPrivate': isPrivate,
             'author': {'username': username, 'email': email},
-            'createdAt': now,
-            'updatedAt': now,
           };
 
-          await FirebaseFirestore.instance.collection('Sets').add(setData);
+          await FirestoreServices.addCardsSet(setData);
 
           Navigator.pop(context);
         } else {
@@ -129,7 +127,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
         final userSnapshot = await FirebaseFirestore.instance.collection('Users').doc(email).get();
         if (userSnapshot.exists) {
           final username = userSnapshot['username'];
-          final now = DateTime.now();
+
           final termsList = termDataList.map((termData) {
             return {
               'id': termData.id,
@@ -144,11 +142,9 @@ class _CreateSetPageState extends State<CreateSetPage> {
             'terms': termsList,
             'isPrivate': isPrivate,
             'author': {'username': username, 'email': email},
-            'updatedAt': now,
           };
 
-          final setId = widget.cardsSet?["id"];
-          await FirebaseFirestore.instance.collection('Sets').doc(setId).update(setData);
+          await FirestoreServices.updateCardsSet(widget.cardsSet?["id"], setData);
 
           Navigator.pop(context);
         } else {

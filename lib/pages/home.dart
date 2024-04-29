@@ -3,9 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards/pages/library.dart';
 import 'package:flash_cards/pages/profile.dart';
 import 'package:flash_cards/pages/test_history.dart';
-import 'package:flash_cards/services/firestore.dart';
-import 'package:flash_cards/widgets/bottom_navigation_bar.dart';
-import 'package:flash_cards/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

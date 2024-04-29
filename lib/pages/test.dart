@@ -1,6 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flash_cards/services/database_services.dart';
-import 'package:flash_cards/services/test-generator.dart';
+import 'package:flash_cards/services/test_generator.dart';
 import 'package:flash_cards/widgets/button.dart';
 import 'package:flash_cards/widgets/circular_result.dart';
 import 'package:flash_cards/widgets/test/multi_choice.dart';

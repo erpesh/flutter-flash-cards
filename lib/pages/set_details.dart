@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards/pages/create_set.dart';
 import 'package:flash_cards/pages/test.dart';
+import 'package:flash_cards/services/firestore_services.dart';
 import 'package:flash_cards/widgets/term_cards.dart';
 import 'package:flutter/material.dart';
 
@@ -17,10 +18,7 @@ class SetDetailsPage extends StatelessWidget {
 
     Future<void> deleteSet() async {
       try {
-        await FirebaseFirestore.instance
-            .collection('Sets')
-            .doc(cardsSet['id'])
-            .delete();
+        FirestoreServices.deleteCardsSet(cardsSet["id"]);
         Navigator.pop(context);
       } catch (e) {
         print('Error deleting set: $e');

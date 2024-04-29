@@ -13,7 +13,7 @@ class DatabaseServices {
   }
 
   static _createDatabase(Database database, int version) {
-    final String sql = 'CREATE TABLE IF NOT EXISTS testResults(id INTEGER PRIMARY KEY AUTOINCREMENT, cardsSetName TEXT, percentage REAL)';
+    const String sql = 'CREATE TABLE IF NOT EXISTS testResults(id INTEGER PRIMARY KEY AUTOINCREMENT, cardsSetName TEXT, percentage REAL)';
     database.execute(sql);
   }
 

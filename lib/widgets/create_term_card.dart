@@ -30,6 +30,10 @@ class CreateTermCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text((index + 1).toString(), style: TextStyle(fontSize: 20)),
+              Padding(
+                padding: const EdgeInsets.only(left: 25),
+                child: Icon(Icons.drag_indicator),
+              ),
               IconButton(
                   onPressed: onDelete,
                   icon: Icon(

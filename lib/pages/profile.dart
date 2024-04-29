@@ -49,7 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void logout() {
     AuthServices.logoutUser();
-    Navigator.pop(context);
   }
 
   @override

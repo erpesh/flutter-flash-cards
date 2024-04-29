@@ -1,9 +1,8 @@
 import 'package:flash_cards/pages/create_set.dart';
-import 'package:flash_cards/widgets/bottom_navigation_bar.dart';
+import 'package:flash_cards/services/firestore_services.dart';
 import 'package:flash_cards/widgets/library_set_card.dart';
 import 'package:flash_cards/widgets/textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LibraryPage extends StatefulWidget {
@@ -67,16 +66,10 @@ class _LibraryPageState extends State<LibraryPage> {
                 ],
               ),
             ),
-            StreamBuilder<QuerySnapshot>(
+            StreamBuilder(
               stream: showOnlyUserSets ?
-              FirebaseFirestore.instance
-                  .collection('Sets')
-                  .where('author.email', isEqualTo: user!.email)
-                  .snapshots() :
-              FirebaseFirestore.instance
-                  .collection('Sets')
-                  .where('isPrivate', isEqualTo: false)
-                  .snapshots(),
+                FirestoreServices.getSetsByUser(user!.email!):
+                FirestoreServices.getPublicSets(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List setsList = snapshot.data!.docs;
