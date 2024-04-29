@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards/helper/helper_functions.dart';
+import 'package:flash_cards/services/auth_services.dart';
 import 'package:flash_cards/widgets/button.dart';
 import 'package:flash_cards/widgets/textfield.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +30,9 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text
-      );
+      final email = emailController.text.trim().toLowerCase();
+      final password = emailController.text.trim();
+      await AuthServices.loginUser(email, password);
       
       if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flash_cards/services/auth_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void logout() {
-    FirebaseAuth.instance.signOut();
+    AuthServices.logoutUser();
     Navigator.pop(context);
   }
 
