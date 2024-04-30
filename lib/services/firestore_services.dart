@@ -2,15 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirestoreServices {
-  static Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails(String email) async {
-    return await FirebaseFirestore.instance
+  FirebaseFirestore firestore;
+
+  FirestoreServices(this.firestore);
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails(String email) async {
+    return await firestore
         .collection("Users")
         .doc(email)
         .get();
   }
 
-  static Future<void> addUserDocument(String email, String username) async {
-    await FirebaseFirestore.instance
+  Future<void> addUserDocument(String email, String username) async {
+    await firestore
         .collection("Users")
         .doc(email)
         .set({
@@ -20,10 +24,17 @@ class FirestoreServices {
     });
   }
 
-  static Future<void> addCardsSet(Map<String, dynamic> cardsSet) async {
+  Future<void> deleteUserDocument(String email) async {
+    await firestore
+        .collection("Users")
+        .doc(email)
+        .delete();
+  }
+
+  Future<DocumentReference<Map<String, dynamic>>> addCardsSet(Map<String, dynamic> cardsSet) async {
     DateTime now = DateTime.now();
 
-    await FirebaseFirestore.instance
+    return await firestore
         .collection("Sets")
         .add({
       ...cardsSet,
@@ -32,8 +43,8 @@ class FirestoreServices {
     });
   }
 
-  static Future<void> updateCardsSet(String setId, Map<String, dynamic> cardsSet) async {
-    await FirebaseFirestore.instance
+  Future<void> updateCardsSet(String setId, Map<String, dynamic> cardsSet) async {
+    await firestore
         .collection("Sets")
         .doc(setId)
         .update({
@@ -42,22 +53,22 @@ class FirestoreServices {
     });
   }
 
-  static Future<void> deleteCardsSet(String setId) async {
-    await FirebaseFirestore.instance
+  Future<void> deleteCardsSet(String setId) async {
+    await firestore
         .collection('Sets')
         .doc(setId)
         .delete();
   }
 
-  static Stream<QuerySnapshot<Object?>>? getPublicSets() {
-    return FirebaseFirestore.instance
+  Stream<QuerySnapshot<Object?>>? getPublicSets() {
+    return firestore
         .collection('Sets')
         .where('isPrivate', isEqualTo: false)
         .snapshots();
   }
 
-  static Stream<QuerySnapshot<Object?>>? getSetsByUser(String email) {
-    return FirebaseFirestore.instance
+  Stream<QuerySnapshot<Object?>>? getSetsByUser(String email) {
+    return firestore
         .collection('Sets')
         .where('author.email', isEqualTo: email)
         .snapshots();

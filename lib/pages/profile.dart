@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        future: FirestoreServices.getUserDetails(currentUser!.email!),
+        future: FirestoreServices(FirebaseFirestore.instance).getUserDetails(currentUser!.email!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flash_cards/services/auth_services.dart';
 import 'package:flash_cards/services/firestore_services.dart';
 import 'package:flash_cards/widgets/button.dart';
@@ -20,7 +22,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
-  final firestore = FirestoreServices();
+  final firestore = FirestoreServices(FirebaseFirestore.instance);
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -61,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> createUserRecord(UserCredential? userCredential) async {
     if (userCredential != null && userCredential.user != null) {
-      FirestoreServices.addUserDocument(
+      firestore.addUserDocument(
           userCredential.user!.email!,
           usernameController.text.trim()
       );

@@ -13,7 +13,6 @@ List<dynamic> sampleTerms = [
   {'id': "9", 'term': 'Term 2', 'definition': 'Definition 2'},
   {'id': "10", 'term': 'Term 2', 'definition': 'Definition 2'},
   {'id': "11", 'term': 'Term 2', 'definition': 'Definition 2'},
-  // Add more terms as needed
 ];
 
 void main() {

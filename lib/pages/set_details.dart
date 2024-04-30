@@ -18,7 +18,7 @@ class SetDetailsPage extends StatelessWidget {
 
     Future<void> deleteSet() async {
       try {
-        FirestoreServices.deleteCardsSet(cardsSet["id"]);
+        FirestoreServices(FirebaseFirestore.instance).deleteCardsSet(cardsSet["id"]);
         Navigator.pop(context);
       } catch (e) {
         print('Error deleting set: $e');

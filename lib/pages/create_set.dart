@@ -37,6 +37,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
   List<TermData> termDataList = [];
   bool isPrivate = false;
 
+  final firestore = FirestoreServices(FirebaseFirestore.instance);
   static const uuid = Uuid();
 
   void _addTermCard() {
@@ -90,7 +91,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
             'author': {'username': username, 'email': email},
           };
 
-          await FirestoreServices.addCardsSet(setData);
+          await firestore.addCardsSet(setData);
 
           Navigator.pop(context);
         } else {
@@ -144,7 +145,7 @@ class _CreateSetPageState extends State<CreateSetPage> {
             'author': {'username': username, 'email': email},
           };
 
-          await FirestoreServices.updateCardsSet(widget.cardsSet?["id"], setData);
+          await firestore.updateCardsSet(widget.cardsSet?["id"], setData);
 
           Navigator.pop(context);
         } else {

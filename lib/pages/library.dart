@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_cards/pages/create_set.dart';
 import 'package:flash_cards/services/firestore_services.dart';
 import 'package:flash_cards/widgets/library_set_card.dart';
@@ -20,6 +21,7 @@ class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final firestore = FirestoreServices(FirebaseFirestore.instance);
 
     return Scaffold(
       appBar: AppBar(
@@ -68,8 +70,8 @@ class _LibraryPageState extends State<LibraryPage> {
             ),
             StreamBuilder(
               stream: showOnlyUserSets ?
-                FirestoreServices.getSetsByUser(user!.email!):
-                FirestoreServices.getPublicSets(),
+                firestore.getSetsByUser(user!.email!):
+                firestore.getPublicSets(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List setsList = snapshot.data!.docs;

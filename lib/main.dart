@@ -26,13 +26,6 @@ void main() async {
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-// final routes = <String, WidgetBuilder>{
-//   '/home': (_) => const HomePage(),
-//   '/library': (_) => const LibraryPage(),
-//   '/tests': (_) => const TestHistoryPage(),
-//   '/profile': (_) => ProfilePage(),
-// };
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
