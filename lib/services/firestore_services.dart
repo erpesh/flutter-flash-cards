@@ -1,32 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirestoreServices {
-  final firestore = FirebaseFirestore.instance;
-  final CollectionReference sets = FirebaseFirestore.instance.collection("Sets");
-  final CollectionReference users = FirebaseFirestore.instance.collection("Users");
-
-  Future<void> addNote(String note) {
-    return sets.add({
-      'note': note,
-      'timestamp': Timestamp.now()
-    });
-  }
-
-  Stream<QuerySnapshot> getSetsStream() {
-    return sets.orderBy('updatedAt', descending: true).snapshots();
-  }
-
-
-
-  Future<void> updateNote(String docId, String newNote) {
-    return sets.doc(docId).update({
-      'note': newNote,
-      'timestamp': Timestamp.now()
-    });
-  }
-
-  Future<void> deleteNote(String docId) {
-    return sets.doc(docId).delete();
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails(String email) async {
+    return await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(email)
+        .get();
   }
 
   static Future<void> addUserDocument(String email, String username) async {
@@ -81,5 +61,11 @@ class FirestoreServices {
         .collection('Sets')
         .where('author.email', isEqualTo: email)
         .snapshots();
+  }
+
+  static Reference getProfilePictureRef(String fileName) {
+    return FirebaseStorage.instance
+        .ref()
+        .child("pfp-$fileName.jpg");
   }
 }
