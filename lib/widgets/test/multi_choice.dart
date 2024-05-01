@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class MultiChoiceCard extends StatelessWidget {
   final int cardNumber;
+  final int testLength;
   final Map<String, dynamic> mcObject;
   final void Function(String answer) selectAnswer;
 
   const MultiChoiceCard({
     super.key,
     required this.cardNumber,
+    required this.testLength,
     required this.mcObject,
     required this.selectAnswer
   });
@@ -41,7 +43,7 @@ class MultiChoiceCard extends StatelessWidget {
                       fontWeight: FontWeight.bold
                   ),
                 ),
-                Text(cardNumber.toString() + "/20")
+                Text(cardNumber.toString() + "/$testLength")
               ],
             ),
             SizedBox(height: 10),

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class TrueFalseCard extends StatelessWidget {
   final int cardNumber;
+  final int testLength;
   final Map<String, dynamic> tfObject;
   final void Function(bool answer) selectAnswer;
 
   const TrueFalseCard({
     super.key,
     required this.cardNumber,
+    required this.testLength,
     required this.tfObject,
     required this.selectAnswer
   });
@@ -41,7 +43,7 @@ class TrueFalseCard extends StatelessWidget {
                     fontWeight: FontWeight.bold
                   ),
                 ),
-                Text(cardNumber.toString() + "/20"),
+                Text(cardNumber.toString() + "/$testLength"),
               ],
             ),
             SizedBox(height: 10),
