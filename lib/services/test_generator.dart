@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
+
 const int maxNumberOfTerms = 14;
 
 class TestGenerator {
@@ -16,20 +18,21 @@ class TestGenerator {
   }
 
   static Map<String, dynamic> generateTest(List<dynamic> terms) {
+    List<dynamic> termsCopy = List.from(terms);
     List<dynamic> selectedTerms = selectRandomTerms(terms);
 
     List<dynamic> multipleChoiceTerms = sublistAndRemove(selectedTerms, 0, selectedTerms.length ~/ 2);
-    List<dynamic> trueFalseTerms = sublistAndRemove(selectedTerms, 0, selectedTerms.length);
+    List<dynamic> trueFalseTerms = selectedTerms;
 
     List<Map<String, dynamic>> trueFalseItems = trueFalseTerms.map((item) {
       bool number = Random().nextBool();
-      terms.removeWhere((a) => a["id"] == item["id"]);
+      termsCopy.removeWhere((a) => a["id"] == item["id"]);
 
       if (number) {
-        int randomNumber = Random().nextInt(terms.length);
-        dynamic incorrectAnswer = terms[randomNumber];
+        int randomNumber = Random().nextInt(termsCopy.length);
+        dynamic incorrectAnswer = termsCopy[randomNumber];
 
-        terms = [...terms, incorrectAnswer];
+        termsCopy = [...termsCopy, incorrectAnswer];
 
         return {
           'id': item["id"],
@@ -51,20 +54,20 @@ class TestGenerator {
     }).toList();
 
     List<Map<String, dynamic>> multipleChoiceItems = multipleChoiceTerms.map((item) {
-      terms.removeWhere((a) => a["id"] == item["id"]);
+      termsCopy.removeWhere((a) => a["id"] == item["id"]);
       List<dynamic> possibleAnswers = [];
 
       for (int i = 0; i < 3; i++) {
-        int randomNumber = Random().nextInt(terms.length);
-        dynamic choiceItem = terms[randomNumber];
+        int randomNumber = Random().nextInt(termsCopy.length);
+        dynamic choiceItem = termsCopy[randomNumber];
         possibleAnswers.add(choiceItem);
-        terms.removeWhere((a) => a["id"] == choiceItem["id"]);
+        termsCopy.removeWhere((a) => a["id"] == choiceItem["id"]);
       }
 
       possibleAnswers.add(item);
       possibleAnswers.shuffle();
 
-      terms = [...terms, ...possibleAnswers];
+      termsCopy = [...termsCopy, ...possibleAnswers];
 
       return {
         'id': item["id"],

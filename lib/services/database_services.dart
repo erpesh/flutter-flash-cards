@@ -39,4 +39,11 @@ class DatabaseServices {
       whereArgs: [id],
     );
   }
+
+  static Future<int> deleteAllTestResults() async {
+    final db = await _openDatabase();
+    return await db.delete(
+      'testResults'
+    );
+  }
 }

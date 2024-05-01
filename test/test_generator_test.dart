@@ -18,8 +18,10 @@ List<dynamic> sampleTerms = [
 
 void main() {
   test('Generated test should contain valid true/false items', () {
-
     Map<String, dynamic> generatedTest = TestGenerator.generateTest(sampleTerms);
+
+    final int trueFalseLength = generatedTest["trueFalse"].length;
+    expect(trueFalseLength, 6);
 
     generatedTest['trueFalse'].forEach((item) {
       expect(item.containsKey('id'), true);
@@ -43,8 +45,11 @@ void main() {
   });
 
   test('Generated test should contain valid multiple choice items', () {
-
     Map<String, dynamic> generatedTest = TestGenerator.generateTest(sampleTerms);
+
+    final int multiChoiceLength = generatedTest["multipleChoice"].length;
+
+    expect(multiChoiceLength, 6);
 
     generatedTest['multipleChoice'].forEach((item) {
       expect(item.containsKey('id'), true);

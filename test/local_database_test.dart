@@ -37,6 +37,8 @@ void main() {
     List<Map<String, dynamic>> updatedResults = await DatabaseServices.getAllTestResults();
     expect(updatedResults.length, 1);
 
+    // Clear database
+    await DatabaseServices.deleteAllTestResults();
     await db.close();
   });
 }
