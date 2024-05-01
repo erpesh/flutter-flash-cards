@@ -1,11 +1,10 @@
+import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 
 class TermCards extends StatefulWidget {
   final List<dynamic> terms;
 
   const TermCards({super.key, required this.terms});
-
-
 
   @override
   State<TermCards> createState() => _TermCardsState();
@@ -43,10 +42,59 @@ class _TermCardsState extends State<TermCards> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget cardSide() {
     final currentTerm = widget.terms[currentIndex];
 
+    return Container(
+      color: Theme.of(context).colorScheme.primary,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(isTermSide ? "Term" : "Definition"),
+                Text((currentIndex + 1).toString() + "/" + widget.terms.length.toString()),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(50),
+            child: Text(
+              isTermSide ? currentTerm["term"] : currentTerm["definition"],
+              style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                  onPressed: prevCard,
+                  icon: Icon(
+                      Icons.chevron_left,
+                      size: 50
+                  )
+              ),
+              IconButton(
+                  onPressed: nextCard,
+                  icon: Icon(
+                      Icons.chevron_right,
+                      size: 50
+                  )
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onHorizontalDragEnd: (DragEndDetails details) {
         if (details.primaryVelocity! > 0) {
@@ -56,51 +104,13 @@ class _TermCardsState extends State<TermCards> {
         }
       },
       onTap: flipCard,
-      child: Card(
-        color: Theme.of(context).colorScheme.primary,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(isTermSide ? "Term" : "Definition"),
-                  Text((currentIndex + 1).toString() + "/" + widget.terms.length.toString()),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(50),
-              child: Text(
-                isTermSide ? currentTerm["term"] : currentTerm["definition"],
-                style: const TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    onPressed: prevCard,
-                    icon: Icon(
-                      Icons.chevron_left,
-                      size: 50
-                    )
-                ),
-                IconButton(
-                    onPressed: nextCard,
-                    icon: Icon(
-                      Icons.chevron_right,
-                      size: 50
-                    )
-                )
-              ],
-            )
-          ],
-        ),
+      child: FlipCard(
+        direction: FlipDirection.VERTICAL,
+        side: isTermSide ? CardSide.FRONT : CardSide.BACK,
+        speed: 400,
+        onFlip: () => flipCard(),
+        front: cardSide(),
+        back: cardSide(),
       ),
     );
   }

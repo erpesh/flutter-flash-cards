@@ -207,67 +207,83 @@ class _CreateSetPageState extends State<CreateSetPage> {
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
+        child: Scrollbar(
+          thumbVisibility: true,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 25),
-                MyTextField(
-                    hintText: "Title", obscureText: false, controller: titleController),
-                const SizedBox(height: 10),
-                MyTextField(
-                    hintText: "Description",
-                    obscureText: false,
-                    controller: descriptionController
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 25),
+                      MyTextField(
+                          hintText: "Title",
+                          obscureText: false,
+                          controller: titleController
+                      ),
+                      const SizedBox(height: 10),
+                      MyTextField(
+                          hintText: "Description",
+                          obscureText: false,
+                          controller: descriptionController
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text("Private"),
+                          Switch(
+                            value: isPrivate,
+                            onChanged: (value) {
+                              setState(() {
+                                isPrivate = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Text("Private"),
-                    Switch(
-                      value: isPrivate,
-                      onChanged: (value) {
-                        setState(() {
-                          isPrivate = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
                 const SizedBox(height: 25),
-                ReorderableListView(
-                  shrinkWrap: true,
-                  onReorder: _onReorder,
-                  children: [
-                    for (int i = 0; i < termDataList.length; i++)
-                      CreateTermCard(
-                        index: i,
-                        termController: termDataList[i].termController,
-                        definitionController: termDataList[i].definitionController,
-                        onDelete: () => _removeTermCard(i),
-                        key: Key(i.toString()),
-                      )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: ReorderableListView(
+                    shrinkWrap: true,
+                    onReorder: _onReorder,
+                    children: [
+                      for (int i = 0; i < termDataList.length; i++)
+                        CreateTermCard(
+                          index: i,
+                          termController: termDataList[i].termController,
+                          definitionController: termDataList[i].definitionController,
+                          onDelete: () => _removeTermCard(i),
+                          key: Key(i.toString()),
+                        )
+                    ],
+                  ),
                 ),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MyButton(
-                      text: "Add Term Card",
-                      onTap: _addTermCard,
-                    ),
-                    widget.cardsSet == null ?
-                    MyButton(
-                      text: "Create",
-                      onTap: _createSet,
-                    ) :
-                    MyButton(
-                      text: "Update",
-                      onTap: _updateSet,
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 25, bottom: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyButton(
+                        text: "Add Term Card",
+                        onTap: _addTermCard,
+                      ),
+                      widget.cardsSet == null ?
+                      MyButton(
+                        text: "Create",
+                        onTap: _createSet,
+                      ) :
+                      MyButton(
+                        text: "Update",
+                        onTap: _updateSet,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

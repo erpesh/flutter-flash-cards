@@ -135,42 +135,12 @@ class _TestPageState extends State<TestPage> {
                     ],
                   ),
                 ) : SizedBox(),
-                // Expanded(
-                //   child: ListView.builder(
-                //     itemCount: generatedTest["trueFalse"].length + generatedTest["multipleChoice"].length,
-                //     itemBuilder: (context, index) {
-                //       if (index < generatedTest["trueFalse"].length) {
-                //         // Render TrueFalseCard for the trueFalse items
-                //         return TrueFalseCard(
-                //           index: index,
-                //           tfObject: generatedTest["trueFalse"][index],
-                //           selectAnswer: (answer) {
-                //             setState(() {
-                //               generatedTest["trueFalse"][index]["userAnswer"] = answer;
-                //               generatedTest["trueFalse"][index]["isCorrect"] = answer;
-                //             });
-                //           },
-                //         );
-                //       } else {
-                //         // Render MultiChoiceCard for the multipleChoice items
-                //         return MultiChoiceCard(
-                //           index: index,
-                //           mcObject: generatedTest["multipleChoice"][index - generatedTest["trueFalse"].length],
-                //           selectAnswer: (answer) {
-                //             setState(() {
-                //               generatedTest["multipleChoice"][index - generatedTest["trueFalse"].length]["userAnswer"] = answer;
-                //             });
-                //           },
-                //         );
-                //       }
-                //     },
-                //   ),
-                // ),
                 Column(
                   children: [
                     for (var i = 0; i < generatedTest["trueFalse"].length; i++)
                       TrueFalseCard(
                         cardNumber: i + 1,
+                        testLength: generatedTest["trueFalse"].length + generatedTest["multipleChoice"].length,
                         tfObject: generatedTest["trueFalse"][i],
                         selectAnswer: (answer) {
                           setState(() {
@@ -185,6 +155,7 @@ class _TestPageState extends State<TestPage> {
                     for (var i = 0; i < generatedTest["multipleChoice"].length; i++)
                       MultiChoiceCard(
                         cardNumber: (i + 1 + generatedTest["trueFalse"].length).toInt(),
+                        testLength: generatedTest["trueFalse"].length + generatedTest["multipleChoice"].length,
                         mcObject: generatedTest["multipleChoice"][i],
                         selectAnswer: (answer) {
                           setState(() {
