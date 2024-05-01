@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_cards/pages/auth/login_or_register.dart';
-import 'package:flash_cards/pages/home.dart';
+import 'package:flash_cards/pages/main_routes.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // User logged in
           if (snapshot.hasData) {
-            return const HomePage();
+            return const MainRoutes();
           }
           // User not logged in
           return const LoginOrRegisterPage();
